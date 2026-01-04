@@ -8,6 +8,7 @@ import { ProvidersModule } from './modules/providers/providers.module';
 import { CoordinatorsModule } from './modules/coordinators/coordinators.module';
 import { BookingsModule } from './modules/bookings/bookings.module';
 import { InvoicesModule } from './modules/invoices/invoices.module';
+import { DocumentsModule } from './modules/documents/documents.module';
 import { PrismaModule } from './common/prisma/prisma.module';
 import { HealthController } from './common/health/health.controller';
 
@@ -49,6 +50,7 @@ import { HealthController } from './common/health/health.controller';
     CoordinatorsModule,
     BookingsModule,
     InvoicesModule,
+    DocumentsModule,
   ],
   controllers: [HealthController],
 })
