@@ -1,6 +1,6 @@
 # Verified Care - Development Progress
 
-**Last Updated:** 4 January 2026 (Authentication Complete)
+**Last Updated:** 5 January 2026 (Provider Onboarding Complete)
 **Project Location:** `/Users/yannleborgne/Desktop/Verified-Care-Project`
 
 ---
@@ -162,6 +162,29 @@ postgresql://neondb_owner:npg_reEkd6UZDP3h@ep-bitter-bar-a7hlicl0.ap-southeast-2
 - Protected routes with guards
 - Rate limiting ready (needs to be enabled)
 
+### 8. Provider Onboarding ✅ (Complete)
+
+**Provider Endpoints:**
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/providers/onboard` | Create provider profile |
+| GET | `/providers/me` | Get current provider |
+| PATCH | `/providers/me` | Update provider profile |
+| PATCH | `/providers/me/service-area` | Update service area |
+| PATCH | `/providers/me/banking` | Update banking details |
+| POST | `/providers/me/verify-abn` | Verify ABN with ABR |
+| GET | `/providers/me/stats` | Get provider statistics |
+| GET | `/providers/search` | Search providers (public) |
+| GET | `/providers/:id` | Get provider by ID (public) |
+
+**Features:**
+- Business profile creation (ABN, business type, NDIS registration)
+- Service type selection (cleaning, transport, yard maintenance)
+- Service area configuration (states, postcodes, radius)
+- Banking details with encryption
+- ABN verification with Australian Business Register
+- Provider search by location, service type, rating
+
 ---
 
 ## Environment Variables
@@ -236,7 +259,7 @@ pnpm format       # Format all files
 | Feature | Effort | Status |
 |---------|--------|--------|
 | Authentication (register, login, JWT) | High | ✅ Complete |
-| Provider registration & onboarding | High | ⏳ Next |
+| Provider registration & onboarding | High | ✅ Complete |
 | Document upload (S3) | Medium | Pending |
 | Booking flow (search → book → confirm) | High | Pending |
 | Dual confirmation system | Medium | Pending |
