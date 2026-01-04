@@ -1,6 +1,6 @@
 # Verified Care - Development Progress
 
-**Last Updated:** 5 January 2026 (Provider Onboarding Complete)
+**Last Updated:** 5 January 2026 (Invoice Generation Complete)
 **Project Location:** `/Users/yannleborgne/Desktop/Verified-Care-Project`
 
 ---
@@ -185,6 +185,33 @@ postgresql://neondb_owner:npg_reEkd6UZDP3h@ep-bitter-bar-a7hlicl0.ap-southeast-2
 - ABN verification with Australian Business Register
 - Provider search by location, service type, rating
 
+### 9. Invoice Generation ✅ (Complete)
+
+**Invoice Endpoints:**
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/invoices` | Create new invoice |
+| POST | `/invoices/from-booking/:bookingId` | Create invoice from booking |
+| GET | `/invoices/provider` | Get provider's invoices |
+| GET | `/invoices/participant` | Get participant's invoices |
+| GET | `/invoices/stats` | Get invoice statistics |
+| GET | `/invoices/:id` | Get invoice details |
+| POST | `/invoices/:id/send` | Send invoice to participant |
+| POST | `/invoices/:id/mark-paid` | Mark invoice as paid |
+| POST | `/invoices/:id/cancel` | Cancel invoice |
+| GET | `/invoices/:id/pdf` | Download invoice as PDF/HTML |
+| GET | `/invoices/:id/html` | View invoice as HTML |
+
+**Features:**
+- Invoice number generation (INV-YYYYMM-XXXX format)
+- Platform fee calculation (5%)
+- GST handling (10%)
+- Line items with quantity, rate, and GST breakdown
+- Invoice lifecycle: draft → sent → viewed → paid
+- PDF/HTML generation for printing and download
+- Provider and participant invoice views with pagination
+- Invoice statistics dashboard
+
 ---
 
 ## Environment Variables
@@ -264,7 +291,7 @@ pnpm format       # Format all files
 | Booking flow (search → book → confirm) | High | ✅ Complete |
 | Dual confirmation system | Medium | ✅ Complete |
 | GPS check-in/check-out | High | ✅ Complete |
-| Invoice generation | Medium | Pending |
+| Invoice generation | Medium | ✅ Complete |
 | Stripe payments | High | Pending |
 | Email notifications (SendGrid) | Medium | Pending |
 | SMS notifications (Twilio) | Medium | Pending |
