@@ -1,0 +1,253 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Primary Colors */
+    --primary: 165 35% 26%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Secondary Colors */
+    --secondary: 18 70% 60%;
+    --secondary-foreground: 0 0% 100%;
+
+    /* Background & Foreground */
+    --background: 35 25% 95%;
+    --foreground: 0 0% 10%;
+
+    /* Card */
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 10%;
+
+    /* Muted */
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 54%;
+
+    /* Border & Input */
+    --border: 0 0% 88%;
+    --input: 0 0% 88%;
+    --ring: 165 35% 26%;
+
+    /* Status Colors */
+    --success: 122 39% 34%;
+    --success-foreground: 0 0% 100%;
+
+    --error: 0 65% 51%;
+    --error-foreground: 0 0% 100%;
+
+    --warning: 45 96% 56%;
+    --warning-foreground: 0 0% 10%;
+
+    --info: 207 90% 46%;
+    --info-foreground: 0 0% 100%;
+
+    /* Border Radius */
+    --radius: 8px;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  /* Accessibility - Focus states */
+  :focus-visible {
+    @apply outline-none ring-2 ring-primary ring-offset-2 ring-offset-background;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-muted rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-border rounded-full hover:bg-muted-foreground/50;
+  }
+}
+
+@layer components {
+  /* Button Base Styles */
+  .btn {
+    @apply inline-flex items-center justify-center rounded-md font-medium transition-colors;
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2;
+    @apply disabled:pointer-events-none disabled:opacity-50;
+  }
+
+  .btn-primary {
+    @apply btn bg-primary text-primary-foreground hover:bg-primary-700;
+  }
+
+  .btn-secondary {
+    @apply btn border border-primary bg-transparent text-primary hover:bg-primary-50;
+  }
+
+  .btn-tertiary {
+    @apply btn bg-transparent text-foreground hover:bg-muted;
+  }
+
+  .btn-destructive {
+    @apply btn border border-error bg-transparent text-error hover:bg-error-light;
+  }
+
+  .btn-accent {
+    @apply btn bg-secondary text-secondary-foreground hover:bg-secondary-500;
+  }
+
+  /* Button Sizes */
+  .btn-sm {
+    @apply h-8 px-3 text-small;
+  }
+
+  .btn-md {
+    @apply h-10 px-4 text-body;
+  }
+
+  .btn-lg {
+    @apply h-12 px-6 text-body;
+  }
+
+  /* Card Styles */
+  .card {
+    @apply rounded-lg border border-border bg-card shadow-card;
+  }
+
+  .card-header {
+    @apply flex flex-col space-y-1.5 p-md;
+  }
+
+  .card-title {
+    @apply text-h4 font-semibold leading-none tracking-tight;
+  }
+
+  .card-description {
+    @apply text-small text-muted-foreground;
+  }
+
+  .card-content {
+    @apply p-md pt-0;
+  }
+
+  .card-footer {
+    @apply flex items-center p-md pt-0;
+  }
+
+  /* Alert Styles */
+  .alert {
+    @apply relative w-full rounded-lg border-l-4 p-md;
+  }
+
+  .alert-success {
+    @apply alert bg-success-light border-l-success text-success;
+  }
+
+  .alert-error {
+    @apply alert bg-error-light border-l-error text-error;
+  }
+
+  .alert-warning {
+    @apply alert bg-warning-light border-l-warning text-warning-foreground;
+  }
+
+  .alert-info {
+    @apply alert bg-info-light border-l-info text-info;
+  }
+
+  /* Badge Styles */
+  .badge {
+    @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-caption font-medium;
+  }
+
+  .badge-pending {
+    @apply badge bg-status-pending text-warning-foreground;
+  }
+
+  .badge-accepted {
+    @apply badge bg-status-accepted text-info;
+  }
+
+  .badge-in-progress {
+    @apply badge bg-status-in-progress text-primary;
+  }
+
+  .badge-completed {
+    @apply badge bg-status-completed text-success;
+  }
+
+  .badge-cancelled {
+    @apply badge bg-status-cancelled text-muted-foreground;
+  }
+
+  /* Fair Price Score */
+  .fair-price-score {
+    @apply flex items-center gap-2;
+  }
+
+  .fair-price-score-bar {
+    @apply h-2 flex-1 rounded-full bg-muted overflow-hidden;
+  }
+
+  .fair-price-score-fill {
+    @apply h-full rounded-full bg-gradient-to-r from-primary to-success transition-all duration-500;
+  }
+
+  /* Star Rating */
+  .star-rating {
+    @apply flex items-center gap-0.5;
+  }
+
+  .star-filled {
+    @apply text-secondary fill-current;
+  }
+
+  .star-empty {
+    @apply text-border;
+  }
+}
+
+@layer utilities {
+  /* Safe area padding for mobile */
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .safe-top {
+    padding-top: env(safe-area-inset-top);
+  }
+
+  /* Line clamp utilities */
+  .line-clamp-1 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+  }
+
+  .line-clamp-2 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .line-clamp-3 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+
+  /* Glass effect */
+  .glass {
+    @apply bg-white/80 backdrop-blur-md;
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "name": "verified-care",
+  "version": "0.1.0",
+  "private": true,
+  "description": "NDIS platform connecting participants with verified providers",
+  "scripts": {
+    "dev": "pnpm run --parallel dev",
+    "dev:web": "pnpm --filter @verified-care/web dev",
+    "dev:api": "pnpm --filter @verified-care/api dev",
+    "build": "pnpm run --parallel build",
+    "build:web": "pnpm --filter @verified-care/web build",
+    "build:api": "pnpm --filter @verified-care/api build",
+    "lint": "pnpm run --parallel lint",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
+    "db:generate": "pnpm --filter @verified-care/database generate",
+    "db:push": "pnpm --filter @verified-care/database push",
+    "db:migrate": "pnpm --filter @verified-care/database migrate",
+    "db:studio": "pnpm --filter @verified-care/database studio",
+    "clean": "rm -rf node_modules apps/*/node_modules packages/*/node_modules",
+    "prepare": "husky install"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=8.0.0"
+  },
+  "packageManager": "pnpm@10.27.0",
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "husky": "^8.0.0",
+    "lint-staged": "^15.2.0",
+    "prettier": "^3.1.0",
+    "turbo": "^1.11.0",
+    "typescript": "^5.3.0"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md}": [
+      "prettier --write"
+    ]
+  }
+}
