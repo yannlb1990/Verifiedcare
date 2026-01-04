@@ -260,10 +260,10 @@ pnpm format       # Format all files
 |---------|--------|--------|
 | Authentication (register, login, JWT) | High | ✅ Complete |
 | Provider registration & onboarding | High | ✅ Complete |
-| Document upload (S3) | Medium | Pending |
-| Booking flow (search → book → confirm) | High | Pending |
-| Dual confirmation system | Medium | Pending |
-| GPS check-in/check-out | High | Pending |
+| Document upload (S3) | Medium | ✅ Complete |
+| Booking flow (search → book → confirm) | High | ✅ Complete |
+| Dual confirmation system | Medium | ✅ Complete |
+| GPS check-in/check-out | High | ✅ Complete |
 | Invoice generation | Medium | Pending |
 | Stripe payments | High | Pending |
 | Email notifications (SendGrid) | Medium | Pending |
