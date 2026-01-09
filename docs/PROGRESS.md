@@ -1,6 +1,6 @@
 # Verified Care - Development Progress
 
-**Last Updated:** 5 January 2026 (Invoice Generation Complete)
+**Last Updated:** 10 January 2026 (Payments & Notifications Complete)
 **Project Location:** `/Users/yannleborgne/Desktop/Verified-Care-Project`
 
 ---
@@ -212,6 +212,81 @@ postgresql://neondb_owner:npg_reEkd6UZDP3h@ep-bitter-bar-a7hlicl0.ap-southeast-2
 - Provider and participant invoice views with pagination
 - Invoice statistics dashboard
 
+### 10. Payments Module ✅ (Mock Mode)
+
+**Payment Endpoints:**
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/payments/status` | Get payment system status |
+| POST | `/payments/intent` | Create payment intent for invoice |
+| POST | `/payments/confirm/:id` | Confirm a payment |
+| POST | `/payments/refund` | Process refund |
+| GET | `/payments/provider` | Get provider payment history |
+| GET | `/payments/participant` | Get participant payment history |
+| GET | `/payments/stats/provider` | Get provider payment stats |
+| GET | `/payments/stats/participant` | Get participant payment stats |
+| POST | `/payments/payout` | Create provider payout |
+| GET | `/payments/payouts/provider` | Get provider payout history |
+| GET | `/payments/methods` | Get saved payment methods |
+
+**Features (Mock Mode):**
+- Stripe payment intents (mock - no real charges)
+- Payment confirmation workflow
+- Refund processing
+- Provider payouts with transfer tracking
+- Payment statistics dashboard
+
+**To Activate Real Stripe:**
+```env
+STRIPE_SECRET_KEY=sk_live_...
+STRIPE_WEBHOOK_SECRET=whsec_...
+```
+
+### 11. Notifications Module ✅ (Mock Mode)
+
+**Notification Endpoints:**
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/notifications/status` | Get notification service status |
+| GET | `/notifications` | Get user notifications |
+| POST | `/notifications/:id/read` | Mark notification as read |
+| POST | `/notifications/read-all` | Mark all as read |
+| POST | `/notifications/test/email` | Send test email (mock) |
+| POST | `/notifications/test/sms` | Send test SMS (mock) |
+| GET | `/notifications/test/sent-emails` | View sent emails (mock) |
+| GET | `/notifications/test/sent-sms` | View sent SMS (mock) |
+
+**Features (Mock Mode):**
+- Email notifications (logs instead of sending)
+- SMS notifications (logs instead of sending)
+- Professional HTML email templates
+- In-app notification storage
+- Booking, invoice, and payment notifications
+
+**To Activate Real Services:**
+```env
+# SendGrid
+SENDGRID_API_KEY=SG...
+SENDGRID_FROM_EMAIL=noreply@verifiedcare.com.au
+
+# Twilio
+TWILIO_ACCOUNT_SID=AC...
+TWILIO_AUTH_TOKEN=...
+TWILIO_PHONE_NUMBER=+61...
+```
+
+### 12. API Test Page ✅
+
+**Location:** `docs/api-test.html`
+
+Open in browser to test all API endpoints:
+- Authentication (register, login, token management)
+- User and provider management
+- Booking workflow
+- Invoice generation
+- Payment processing (mock)
+- Notification testing (mock)
+
 ---
 
 ## Environment Variables
@@ -292,9 +367,9 @@ pnpm format       # Format all files
 | Dual confirmation system | Medium | ✅ Complete |
 | GPS check-in/check-out | High | ✅ Complete |
 | Invoice generation | Medium | ✅ Complete |
-| Stripe payments | High | Pending |
-| Email notifications (SendGrid) | Medium | Pending |
-| SMS notifications (Twilio) | Medium | Pending |
+| Stripe payments | High | ✅ Complete (Mock Mode) |
+| Email notifications (SendGrid) | Medium | ✅ Complete (Mock Mode) |
+| SMS notifications (Twilio) | Medium | ✅ Complete (Mock Mode) |
 
 ### Priority 1 - Launch
 
