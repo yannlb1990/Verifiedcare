@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verified Care API Tester</title>
+  <style>
+    :root {
+      --primary: #2D5A4A;
+      --primary-dark: #1B4D3E;
+      --secondary: #E07850;
+      --background: #F5F2ED;
+      --surface: #FFFFFF;
+      --text: #1f2937;
+      --text-muted: #6b7280;
+      --success: #10b981;
+      --error: #ef4444;
+      --warning: #f59e0b;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--background);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .header {
+      background: var(--primary);
+      color: white;
+      padding: 20px;
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .header h1 { font-size: 24px; margin-bottom: 4px; }
+    .header p { font-size: 14px; opacity: 0.9; }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
+      display: grid;
+      grid-template-columns: 280px 1fr 400px;
+      gap: 20px;
+      min-height: calc(100vh - 80px);
+    }
+
+    @media (max-width: 1200px) {
+      .container { grid-template-columns: 1fr; }
+    }
+
+    .sidebar {
+      background: var(--surface);
+      border-radius: 12px;
+      padding: 16px;
+      height: fit-content;
+      position: sticky;
+      top: 100px;
+    }
+
+    .sidebar h3 {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .nav-group { margin-bottom: 16px; }
+
+    .nav-item {
+      display: block;
+      padding: 8px 12px;
+      border-radius: 6px;
+      text-decoration: none;
+      color: var(--text);
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .nav-item:hover { background: #f3f4f6; }
+    .nav-item.active { background: var(--primary); color: white; }
+
+    .main {
+      background: var(--surface);
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .section { display: none; }
+    .section.active { display: block; }
+
+    .section-title {
+      font-size: 20px;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid var(--primary);
+    }
+
+    .endpoint-card {
+      background: #f9fafb;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+
+    .endpoint-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .method {
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .method.get { background: #dbeafe; color: #1d4ed8; }
+    .method.post { background: #dcfce7; color: #16a34a; }
+    .method.patch { background: #fef3c7; color: #d97706; }
+    .method.delete { background: #fee2e2; color: #dc2626; }
+
+    .endpoint-path { font-family: monospace; font-size: 14px; }
+
+    .form-group {
+      margin-bottom: 12px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 12px;
+      font-weight: 500;
+      margin-bottom: 4px;
+      color: var(--text-muted);
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    .form-group textarea { min-height: 80px; resize: vertical; }
+
+    .btn {
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      transition: background 0.2s;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover { background: var(--primary-dark); }
+
+    .btn-secondary {
+      background: #e5e7eb;
+      color: var(--text);
+    }
+
+    .btn-secondary:hover { background: #d1d5db; }
+
+    .response-panel {
+      background: var(--surface);
+      border-radius: 12px;
+      padding: 16px;
+      height: fit-content;
+      position: sticky;
+      top: 100px;
+    }
+
+    .response-panel h3 {
+      font-size: 16px;
+      margin-bottom: 12px;
+    }
+
+    .status-indicator {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 500;
+      margin-bottom: 12px;
+    }
+
+    .status-indicator.success { background: #dcfce7; color: #16a34a; }
+    .status-indicator.error { background: #fee2e2; color: #dc2626; }
+    .status-indicator.pending { background: #fef3c7; color: #d97706; }
+
+    .response-body {
+      background: #1f2937;
+      color: #f9fafb;
+      padding: 16px;
+      border-radius: 8px;
+      font-family: monospace;
+      font-size: 12px;
+      white-space: pre-wrap;
+      word-break: break-all;
+      max-height: 500px;
+      overflow-y: auto;
+    }
+
+    .config-section {
+      background: #fef3c7;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 20px;
+    }
+
+    .config-section h4 {
+      font-size: 14px;
+      margin-bottom: 12px;
+      color: #92400e;
+    }
+
+    .token-display {
+      font-family: monospace;
+      font-size: 11px;
+      background: white;
+      padding: 8px;
+      border-radius: 4px;
+      word-break: break-all;
+      max-height: 60px;
+      overflow-y: auto;
+    }
+
+    .quick-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    .quick-actions .btn { font-size: 12px; padding: 6px 12px; }
+
+    .tabs {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 16px;
+      border-bottom: 1px solid #e5e7eb;
+      padding-bottom: 8px;
+    }
+
+    .tab {
+      padding: 8px 16px;
+      border-radius: 6px 6px 0 0;
+      cursor: pointer;
+      font-size: 14px;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+    }
+
+    .tab.active {
+      background: var(--primary);
+      color: white;
+    }
+
+    .mock-badge {
+      display: inline-block;
+      background: #fef3c7;
+      color: #92400e;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 500;
+      margin-left: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Verified Care API Tester</h1>
+    <p>Test all API endpoints - Backend running on http://localhost:4000</p>
+  </div>
+
+  <div class="container">
+    <!-- Sidebar Navigation -->
+    <div class="sidebar">
+      <div class="nav-group">
+        <h3>Configuration</h3>
+        <div class="nav-item active" onclick="showSection('config')">API Config</div>
+      </div>
+
+      <div class="nav-group">
+        <h3>Authentication</h3>
+        <div class="nav-item" onclick="showSection('auth')">Auth Endpoints</div>
+      </div>
+
+      <div class="nav-group">
+        <h3>Users & Profiles</h3>
+        <div class="nav-item" onclick="showSection('users')">Users</div>
+        <div class="nav-item" onclick="showSection('providers')">Providers</div>
+        <div class="nav-item" onclick="showSection('participants')">Participants</div>
+      </div>
+
+      <div class="nav-group">
+        <h3>Bookings</h3>
+        <div class="nav-item" onclick="showSection('bookings')">Booking Flow</div>
+      </div>
+
+      <div class="nav-group">
+        <h3>Financial</h3>
+        <div class="nav-item" onclick="showSection('invoices')">Invoices</div>
+        <div class="nav-item" onclick="showSection('payments')">Payments <span class="mock-badge">MOCK</span></div>
+      </div>
+
+      <div class="nav-group">
+        <h3>Communications</h3>
+        <div class="nav-item" onclick="showSection('notifications')">Notifications <span class="mock-badge">MOCK</span></div>
+      </div>
+
+      <div class="nav-group">
+        <h3>Documents</h3>
+        <div class="nav-item" onclick="showSection('documents')">Document Upload</div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main">
+      <!-- Config Section -->
+      <div id="config" class="section active">
+        <h2 class="section-title">API Configuration</h2>
+
+        <div class="config-section">
+          <h4>API Base URL</h4>
+          <div class="form-group">
+            <input type="text" id="apiUrl" value="http://localhost:4000" />
+          </div>
+        </div>
+
+        <div class="config-section">
+          <h4>Authentication Token</h4>
+          <div class="form-group">
+            <label>JWT Token (obtained after login)</label>
+            <textarea id="authToken" placeholder="Paste your JWT token here after logging in..."></textarea>
+          </div>
+          <div class="token-display" id="tokenPreview">No token set</div>
+        </div>
+
+        <div class="endpoint-card">
+          <h4>Quick Start</h4>
+          <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 12px;">
+            1. Start the API server: <code>pnpm dev:api</code><br>
+            2. Register a new user or login<br>
+            3. Copy the token and paste above<br>
+            4. Test other endpoints
+          </p>
+          <div class="quick-actions">
+            <button class="btn btn-primary" onclick="testConnection()">Test Connection</button>
+            <button class="btn btn-secondary" onclick="clearToken()">Clear Token</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Auth Section -->
+      <div id="auth" class="section">
+        <h2 class="section-title">Authentication</h2>
+
+        <div class="endpoint-card">
+          <div class="endpoint-header">
+            <span class="method post">POST</span>
+            <span class="endpoint-path">/auth/register</span>
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="reg-email" value="test@example.com" />
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="reg-password" value="Password123!" />
+          </div>
+          <div class="form-group">
+            <label>First Name</label>
+            <input type="text" id="reg-firstName" value="John" />
+          </div>
+          <div class="form-group">
+            <label>Last Name</label>
+            <input type="text" id="reg-lastName" value="Doe" />
+          </div>
+          <div class="form-group">
+            <label>Role</label>
+            <select id="reg-role">
+              <option value="participant">Participant</option>
+              <option value="provider">Provider</option>
+              <option value="coordinator">Coordinator</option>
+            </select>
+          </div>
+          <button class="btn btn-primary" onclick="register()">Register</button>
+        </div>
+
+        <div class="endpoint-card">
+          <div class="endpoint-header">
+            <span class="method post">POST</span>
+            <span class="endpoint-path">/auth/login</span>
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="login-email" value="test@example.com" />
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="login-password" value="Password123!" />
+          </div>
+          <button class="btn btn-primary" onclick="login()">Login</button>
+        </div>
+
+        <div class="endpoint-card">
+          <div class="endpoint-header">
+            <span class="method get">GET</span>
+            <span class="endpoint-path">/auth/me</span>
+          </div>
+          <button class="btn btn-primary" onclick="getMe()">Get Current User</button>
+        </div>
+      </div>
+
+      <!-- Users Section -->
+      <div id="users" class="section">
+        <h2 class="section-title">Users</h2>
+
+        <div class="endpoint-card">
+          <div class="endpoint-header">
+            <span class="method get">GET</span>
+            <span class="endpoint-path">/users/me</span>
+          </div>
+          <button class="btn btn-primary" onclick="apiCall('GET', '/users/me')">Get My Profile</button>
+        </div>
+
+        <div class="endpoint-card">
+          <div class="endpoint-header">
+            <span class="method patch">PATCH</span>
+            <span class="endpoint-path">/users/me</span>
+          </div>
+          <div class="form-group">
+            <label>Phone</label>
+            <input type="text" id="user-phone" value="+61412345678" />
+          </div>
+          <button class="btn btn-primary" onclick="updateProfile()">Update Profile</button>
+        </div>
+      </div>
+
+      <!-- Providers Section -->
+      <div id="providers" class="section">
+        <h2 class="section-title">Providers</h2>
+
+        <div class="endpoint-card">
+          <div class="endpoint-header">
+            <span class="method post">POST</span>
+            <span class="endpoint-path">/providers/onboard</span>
+          </div>
+          <div class="form-group">
+            <label>Business Name</label>
+            <input type="text" id="prov-businessName" value="Quality Care Services" />
+          </div>
+          <div class="form-group">
+            <label>ABN</label>
+            <input type="text" id="prov-abn" value="51824753556" />
+          </div>
+          <div class="form-group">
+            <label>Business Type</label>
+            <select id="prov-businessType">
+              <option value="sole_trader">Sole Trader</option>
+              <option value="company">Company</option>
+              <option value="partnership">Partnership</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Service Types (comma separated)</label>
+            <input type="text" id="prov-serviceTypes" value="domestic_cleaning,yard_maintenance" />
+          </div>
+          <button class="btn btn-primary" onclick="onboardProvider()">Create Provider Profile</button>
+        </div>
+
+        <div class="endpoint-card">
+          <div class="endpoint-header">
+            <span class="method get">GET</span>
+            <span class="endpoint-path">/providers/me</span>
+          </div>
+          <button class="btn btn-primary" onclick="apiCall('GET', '/providers/me')">Get My Provider Profile</button>
+        </div>
+
+        <div class="endpoint-card">
+          <div class="endpoint-header">
+            <span class="method get">GET</span>
+            <span class="endpoint-path">/providers/search</span>
+          </div>
+          <div class="form-group">
+            <label>Service Type</label>
+            <select id="search-serviceType">
+              <option value="">All</option>
+              <option value="domestic_cleaning">Domestic Cleaning</option>
+              <option value="community_transport">Community Transport</option>
+              <option value="yard_maintenance">Yard Maintenance</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>State</label>
+            <input type="text" id="search-state" value="NSW" />
+          </div>
+          <button class="btn btn-primary" onclick="searchProviders()">Search Providers</button>
+        </div>
+      </div>
+
+      <!-- Participants Section -->
+      <div id="participants" class="section">
+        <h2 class="section-title">Participants</h2>
+
+        <div class="endpoint-card">
+          <div class="endpoint-header">
+            <span class="method post">POST</span>
+            <span class="endpoint-path">/participants/profile</span>
+          </div>
+          <div class="form-group">
+            <label>NDIS Number</label>
+            <input type="text" id="part-ndisNumber" value="431234567" />
+          </div>
+          <div class="form-group">
+            <label>Plan Management Type</label>
+            <select id="part-planType">
+              <option value="self">Self Managed</option>
+              <option value="plan">Plan Managed</option>
+              <option value="agency">Agency Managed</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Address</label>
+            <input type="text" id="part-address" value="123 Main St, Sydney NSW 2000" />
+          </div>
+          <button class="btn btn-primary" onclick="createParticipant()">Create Participant Profile</button>
+        </div>
+
+        <div class="endpoint-card">
+          <div class="endpoint-header">
+            <span class="method get">GET</span>
+            <span class="endpoint-path">/participants/me</span>
+          </div>
+          <button class="btn btn-primary" onclick="apiCall('GET', '/participants/me')">Get My Participant Profile</button>
+        </div>
+      </div>
+
+      <!-- Bookings Section -->
+      <div id="bookings" class="section">
+        <h2 class="section-title">Bookings</h2>
+
+        <div class="endpoint-card">
+          <div class="endpoint-header">
+            <span class="method post">POST</span>
+            <span class="endpoint-path">/bookings</span>
+          </div>
+          <div class="form-group">
+            <label>Provider ID</label>
+            <input type="text" id="book-providerId" placeholder="UUID of provider" />
+          </div>
+          <div class="form-group">
+            <label>Service Type</label>
+            <select id="book-serviceType">
+              <option value="domestic_cleaning">Domestic Cleaning</option>
+              <option value="community_transport">Community Transport</option>
+              <option value="yard_maintenance">Yard Maintenance</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Scheduled Date</label>
+            <input type="date" id="book-date" />
+          </div>
+          <div class="form-group">
+            <label>Start Time</label>
+            <input type="time" id="book-startTime" value="09:00" />
+          </div>
+          <div class="form-group">
+            <label>Duration (hours)</label>
+            <input type="number" id="book-duration" value="2" />
+          </div>
+          <div class="form-group">
+            <label>Service Address</label>
+            <input type="text" id="book-address" value="123 Main St, Sydney NSW 2000" />
+          </div>
+          <button class="btn btn-primary" onclick="createBooking()">Create Booking</button>
+        </div>
+
+        <div class="endpoint-card">
+          <div class="endpoint-header">
+            <span class="method get">GET</span>
+            <span class="endpoint-path">/bookings/participant</span>
+          </div>
+          <button class="btn btn-primary" onclick="apiCall('GET', '/bookings/participant')">Get My Bookings (Participant)</button>
+        </div>
+
+        <div class="endpoint-card">
+          <div class="endpoint-header">
+            <span class="method get">GET</span>
+            <span class="endpoint-path">/bookings/provider</span>
+          </div>
+          <button class="btn btn-primary" onclick="apiCall('GET', '/bookings/provider')">Get My Bookings (Provider)</button>
+        </div>
+
+        <div class="endpoint-card">
+          <div class="endpoint-header">
+            <span class="method post">POST</span>
+            <span class="endpoint-path">/bookings/:id/accept</span>
+          </div>
+          <div class="form-group">
+            <label>Booking ID</label>
+            <input type="text" id="accept-bookingId" placeholder="UUID of booking" />
+          </div>
+          <button class="btn btn-primary" onclick="acceptBooking()">Accept Booking</button>
+        </div>
+
+        <div class="endpoint-card">
+          <div class="endpoint-header">
+            <span class="method post">POST</span>
+            <span class="endpoint-path">/bookings/:id/check-in</span>
+          </div>
+          <div class="form-group">
+            <label>Booking ID</label>
+            <input type="text" id="checkin-bookingId" placeholder="UUID of booking" />
+          </div>
+          <div class="form-group">
+            <label>Latitude</label>
+            <input type="text" id="checkin-lat" value="-33.8688" />
+          </div>
+          <div class="form-group">
+            <label>Longitude</label>
+            <input type="text" id="checkin-lng" value="151.2093" />
+          </div>
+          <button class="btn btn-primary" onclick="checkIn()">Check In</button>
+          <button class="btn btn-secondary" onclick="getCurrentLocation()">Use My Location</button>
+        </div>
+      </div>
+
+      <!-- Invoices Section -->
+      <div id="invoices" class="section">
+        <h2 class="section-title">Invoices</h2>
+
+        <div class="endpoint-card">
+          <div class="endpoint-header">
+            <span class="method post">POST</span>
+            <span class="endpoint-path">/invoices/from-booking/:bookingId</span>
+          </div>
+          <div class="form-group">
+            <label>Booking ID (completed booking)</label>
+            <input type="text" id="inv-bookingId" placeholder="UUID of completed booking" />
+          </div>
+          <button class="btn btn-primary" onclick="createInvoiceFromBooking()">Create Invoice from Booking</button>
+        </div>
+
+        <div class="endpoint-card">
+          <div class="endpoint-header">
+            <span class="method get">GET</span>
+            <span class="endpoint-path">/invoices/provider</span>
+          </div>
+          <button class="btn btn-primary" onclick="apiCall('GET', '/invoices/provider')">Get Provider Invoices</button>
+        </div>
+
+        <div class="endpoint-card">
+          <div class="endpoint-header">
+            <span class="method get">GET</span>
+            <span class="endpoint-path">/invoices/participant</span>
+          </div>
+          <button class="btn btn-primary" onclick="apiCall('GET', '/invoices/participant')">Get Participant Invoices</button>
+        </div>
+
+        <div class="endpoint-card">
+          <div class="endpoint-header">
+            <span class="method get">GET</span>
+            <span class="endpoint-path">/invoices/stats</span>
+          </div>
+          <button class="btn btn-primary" onclick="apiCall('GET', '/invoices/stats')">Get Invoice Stats</button>
+        </div>
+
+        <div class="endpoint-card">
+          <div class="endpoint-header">
+            <span class="method get">GET</span>
+            <span class="endpoint-path">/invoices/:id/html</span>
+          </div>
+          <div class="form-group">
+            <label>Invoice ID</label>
+            <input type="text" id="inv-viewId" placeholder="UUID of invoice" />
+          </div>
+          <button class="btn btn-primary" onclick="viewInvoiceHtml()">View Invoice HTML</button>
+        </div>
+      </div>
+
+      <!-- Payments Section -->
+      <div id="payments" class="section">
+        <h2 class="section-title">Payments <span class="mock-badge">MOCK MODE</span></h2>
+
+        <div class="endpoint-card">
+          <div class="endpoint-header">
+            <span class="method get">GET</span>
+            <span class="endpoint-path">/payments/status</span>
+          </div>
+          <button class="btn btn-primary" onclick="apiCall('GET', '/payments/status')">Get Payment System Status</button>
+        </div>
+
+        <div class="endpoint-card">
+          <div class="endpoint-header">
+            <span class="method post">POST</span>
+            <span class="endpoint-path">/payments/intent</span>
+          </div>
+          <div class="form-group">
+            <label>Invoice ID</label>
+            <input type="text" id="pay-invoiceId" placeholder="UUID of invoice" />
+          </div>
+          <button class="btn btn-primary" onclick="createPaymentIntent()">Create Payment Intent</button>
+        </div>
+
+        <div class="endpoint-card">
+          <div class="endpoint-header">
+            <span class="method post">POST</span>
+            <span class="endpoint-path">/payments/confirm/:paymentIntentId</span>
+          </div>
+          <div class="form-group">
+            <label>Payment Intent ID</label>
+            <input type="text" id="pay-intentId" placeholder="pi_mock_..." />
+          </div>
+          <button class="btn btn-primary" onclick="confirmPayment()">Confirm Payment</button>
+        </div>
+
+        <div class="endpoint-card">
+          <div class="endpoint-header">
+            <span class="method get">GET</span>
+            <span class="endpoint-path">/payments/provider</span>
+          </div>
+          <button class="btn btn-primary" onclick="apiCall('GET', '/payments/provider')">Get Provider Payments</button>
+        </div>
+
+        <div class="endpoint-card">
+          <div class="endpoint-header">
+            <span class="method get">GET</span>
+            <span class="endpoint-path">/payments/methods</span>
+          </div>
+          <button class="btn btn-primary" onclick="apiCall('GET', '/payments/methods')">Get Payment Methods (Mock)</button>
+        </div>
+      </div>
+
+      <!-- Notifications Section -->
+      <div id="notifications" class="section">
+        <h2 class="section-title">Notifications <span class="mock-badge">MOCK MODE</span></h2>
+
+        <div class="endpoint-card">
+          <div class="endpoint-header">
+            <span class="method get">GET</span>
+            <span class="endpoint-path">/notifications/status</span>
+          </div>
+          <button class="btn btn-primary" onclick="apiCall('GET', '/notifications/status')">Get Notification Status</button>
+        </div>
+
+        <div class="endpoint-card">
+          <div class="endpoint-header">
+            <span class="method get">GET</span>
+            <span class="endpoint-path">/notifications</span>
+          </div>
+          <button class="btn btn-primary" onclick="apiCall('GET', '/notifications')">Get My Notifications</button>
+        </div>
+
+        <div class="endpoint-card">
+          <div class="endpoint-header">
+            <span class="method post">POST</span>
+            <span class="endpoint-path">/notifications/test/email</span>
+          </div>
+          <div class="form-group">
+            <label>To Email</label>
+            <input type="email" id="test-email" value="test@example.com" />
+          </div>
+          <div class="form-group">
+            <label>Subject</label>
+            <input type="text" id="test-subject" value="Test Email from Verified Care" />
+          </div>
+          <div class="form-group">
+            <label>Message</label>
+            <textarea id="test-emailBody">This is a test email from the Verified Care platform.</textarea>
+          </div>
+          <button class="btn btn-primary" onclick="sendTestEmail()">Send Test Email (Mock)</button>
+        </div>
+
+        <div class="endpoint-card">
+          <div class="endpoint-header">
+            <span class="method post">POST</span>
+            <span class="endpoint-path">/notifications/test/sms</span>
+          </div>
+          <div class="form-group">
+            <label>To Phone</label>
+            <input type="text" id="test-phone" value="+61412345678" />
+          </div>
+          <div class="form-group">
+            <label>Message</label>
+            <textarea id="test-smsBody">This is a test SMS from Verified Care.</textarea>
+          </div>
+          <button class="btn btn-primary" onclick="sendTestSms()">Send Test SMS (Mock)</button>
+        </div>
+
+        <div class="endpoint-card">
+          <div class="endpoint-header">
+            <span class="method get">GET</span>
+            <span class="endpoint-path">/notifications/test/sent-emails</span>
+          </div>
+          <button class="btn btn-primary" onclick="apiCall('GET', '/notifications/test/sent-emails')">View Sent Emails (Mock)</button>
+        </div>
+
+        <div class="endpoint-card">
+          <div class="endpoint-header">
+            <span class="method get">GET</span>
+            <span class="endpoint-path">/notifications/test/sent-sms</span>
+          </div>
+          <button class="btn btn-primary" onclick="apiCall('GET', '/notifications/test/sent-sms')">View Sent SMS (Mock)</button>
+        </div>
+      </div>
+
+      <!-- Documents Section -->
+      <div id="documents" class="section">
+        <h2 class="section-title">Documents</h2>
+
+        <div class="endpoint-card">
+          <div class="endpoint-header">
+            <span class="method post">POST</span>
+            <span class="endpoint-path">/documents/upload</span>
+          </div>
+          <div class="form-group">
+            <label>Document Type</label>
+            <select id="doc-type">
+              <option value="insurance_public_liability">Public Liability Insurance</option>
+              <option value="insurance_professional_indemnity">Professional Indemnity</option>
+              <option value="ndis_worker_screening">NDIS Worker Screening</option>
+              <option value="police_check">Police Check</option>
+              <option value="wwcc">Working With Children Check</option>
+              <option value="first_aid">First Aid Certificate</option>
+              <option value="abn_certificate">ABN Certificate</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Expiry Date</label>
+            <input type="date" id="doc-expiry" />
+          </div>
+          <div class="form-group">
+            <label>File</label>
+            <input type="file" id="doc-file" />
+          </div>
+          <button class="btn btn-primary" onclick="uploadDocument()">Upload Document</button>
+        </div>
+
+        <div class="endpoint-card">
+          <div class="endpoint-header">
+            <span class="method get">GET</span>
+            <span class="endpoint-path">/documents/me</span>
+          </div>
+          <button class="btn btn-primary" onclick="apiCall('GET', '/documents/me')">Get My Documents</button>
+        </div>
+
+        <div class="endpoint-card">
+          <div class="endpoint-header">
+            <span class="method get">GET</span>
+            <span class="endpoint-path">/documents/compliance</span>
+          </div>
+          <button class="btn btn-primary" onclick="apiCall('GET', '/documents/compliance')">Get Compliance Status</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Response Panel -->
+    <div class="response-panel">
+      <h3>Response</h3>
+      <div id="responseStatus" class="status-indicator pending">Ready</div>
+      <div id="responseBody" class="response-body">// Response will appear here</div>
+    </div>
+  </div>
+
+  <script>
+    // Set default date for booking
+    document.getElementById('book-date').value = new Date(Date.now() + 86400000).toISOString().split('T')[0];
+    document.getElementById('doc-expiry').value = new Date(Date.now() + 365 * 86400000).toISOString().split('T')[0];
+
+    // Load saved token
+    const savedToken = localStorage.getItem('vc_auth_token');
+    if (savedToken) {
+      document.getElementById('authToken').value = savedToken;
+      updateTokenPreview();
+    }
+
+    // Save token on change
+    document.getElementById('authToken').addEventListener('input', function() {
+      localStorage.setItem('vc_auth_token', this.value);
+      updateTokenPreview();
+    });
+
+    function updateTokenPreview() {
+      const token = document.getElementById('authToken').value;
+      const preview = document.getElementById('tokenPreview');
+      if (token) {
+        preview.textContent = token.substring(0, 50) + '...';
+      } else {
+        preview.textContent = 'No token set';
+      }
+    }
+
+    function getApiUrl() {
+      return document.getElementById('apiUrl').value;
+    }
+
+    function getAuthToken() {
+      return document.getElementById('authToken').value;
+    }
+
+    function showSection(sectionId) {
+      // Hide all sections
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+
+      // Show selected section
+      document.getElementById(sectionId).classList.add('active');
+      event.target.classList.add('active');
+    }
+
+    function showResponse(status, data) {
+      const statusEl = document.getElementById('responseStatus');
+      const bodyEl = document.getElementById('responseBody');
+
+      statusEl.className = 'status-indicator ' + (status >= 200 && status < 300 ? 'success' : 'error');
+      statusEl.textContent = `Status: ${status}`;
+      bodyEl.textContent = JSON.stringify(data, null, 2);
+    }
+
+    async function apiCall(method, endpoint, body = null) {
+      const url = getApiUrl() + endpoint;
+      const token = getAuthToken();
+
+      const options = {
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      };
+
+      if (token) {
+        options.headers['Authorization'] = `Bearer ${token}`;
+      }
+
+      if (body) {
+        options.body = JSON.stringify(body);
+      }
+
+      try {
+        document.getElementById('responseStatus').className = 'status-indicator pending';
+        document.getElementById('responseStatus').textContent = 'Loading...';
+
+        const response = await fetch(url, options);
+        const data = await response.json();
+        showResponse(response.status, data);
+        return { status: response.status, data };
+      } catch (error) {
+        showResponse(0, { error: error.message });
+        return { status: 0, error };
+      }
+    }
+
+    async function testConnection() {
+      await apiCall('GET', '/');
+    }
+
+    function clearToken() {
+      document.getElementById('authToken').value = '';
+      localStorage.removeItem('vc_auth_token');
+      updateTokenPreview();
+    }
+
+    async function register() {
+      const result = await apiCall('POST', '/auth/register', {
+        email: document.getElementById('reg-email').value,
+        password: document.getElementById('reg-password').value,
+        firstName: document.getElementById('reg-firstName').value,
+        lastName: document.getElementById('reg-lastName').value,
+        role: document.getElementById('reg-role').value,
+      });
+
+      if (result.data?.accessToken) {
+        document.getElementById('authToken').value = result.data.accessToken;
+        localStorage.setItem('vc_auth_token', result.data.accessToken);
+        updateTokenPreview();
+      }
+    }
+
+    async function login() {
+      const result = await apiCall('POST', '/auth/login', {
+        email: document.getElementById('login-email').value,
+        password: document.getElementById('login-password').value,
+      });
+
+      if (result.data?.accessToken) {
+        document.getElementById('authToken').value = result.data.accessToken;
+        localStorage.setItem('vc_auth_token', result.data.accessToken);
+        updateTokenPreview();
+      }
+    }
+
+    async function getMe() {
+      await apiCall('GET', '/auth/me');
+    }
+
+    async function updateProfile() {
+      await apiCall('PATCH', '/users/me', {
+        phone: document.getElementById('user-phone').value,
+      });
+    }
+
+    async function onboardProvider() {
+      await apiCall('POST', '/providers/onboard', {
+        businessName: document.getElementById('prov-businessName').value,
+        abn: document.getElementById('prov-abn').value,
+        businessType: document.getElementById('prov-businessType').value,
+        serviceTypes: document.getElementById('prov-serviceTypes').value.split(',').map(s => s.trim()),
+      });
+    }
+
+    async function searchProviders() {
+      let endpoint = '/providers/search?';
+      const serviceType = document.getElementById('search-serviceType').value;
+      const state = document.getElementById('search-state').value;
+
+      if (serviceType) endpoint += `serviceType=${serviceType}&`;
+      if (state) endpoint += `state=${state}`;
+
+      await apiCall('GET', endpoint);
+    }
+
+    async function createParticipant() {
+      await apiCall('POST', '/participants/profile', {
+        ndisNumber: document.getElementById('part-ndisNumber').value,
+        planManagementType: document.getElementById('part-planType').value,
+        address: document.getElementById('part-address').value,
+      });
+    }
+
+    async function createBooking() {
+      await apiCall('POST', '/bookings', {
+        providerId: document.getElementById('book-providerId').value,
+        serviceType: document.getElementById('book-serviceType').value,
+        scheduledDate: document.getElementById('book-date').value,
+        startTime: document.getElementById('book-startTime').value,
+        scheduledDurationHours: parseFloat(document.getElementById('book-duration').value),
+        serviceAddress: document.getElementById('book-address').value,
+      });
+    }
+
+    async function acceptBooking() {
+      const bookingId = document.getElementById('accept-bookingId').value;
+      await apiCall('POST', `/bookings/${bookingId}/accept`);
+    }
+
+    async function checkIn() {
+      const bookingId = document.getElementById('checkin-bookingId').value;
+      await apiCall('POST', `/bookings/${bookingId}/check-in`, {
+        latitude: parseFloat(document.getElementById('checkin-lat').value),
+        longitude: parseFloat(document.getElementById('checkin-lng').value),
+      });
+    }
+
+    function getCurrentLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+          document.getElementById('checkin-lat').value = position.coords.latitude;
+          document.getElementById('checkin-lng').value = position.coords.longitude;
+        });
+      }
+    }
+
+    async function createInvoiceFromBooking() {
+      const bookingId = document.getElementById('inv-bookingId').value;
+      await apiCall('POST', `/invoices/from-booking/${bookingId}`);
+    }
+
+    async function viewInvoiceHtml() {
+      const invoiceId = document.getElementById('inv-viewId').value;
+      window.open(getApiUrl() + `/invoices/${invoiceId}/html`, '_blank');
+    }
+
+    async function createPaymentIntent() {
+      await apiCall('POST', '/payments/intent', {
+        invoiceId: document.getElementById('pay-invoiceId').value,
+      });
+    }
+
+    async function confirmPayment() {
+      const intentId = document.getElementById('pay-intentId').value;
+      await apiCall('POST', `/payments/confirm/${intentId}`);
+    }
+
+    async function sendTestEmail() {
+      await apiCall('POST', '/notifications/test/email', {
+        to: document.getElementById('test-email').value,
+        subject: document.getElementById('test-subject').value,
+        html: document.getElementById('test-emailBody').value,
+      });
+    }
+
+    async function sendTestSms() {
+      await apiCall('POST', '/notifications/test/sms', {
+        to: document.getElementById('test-phone').value,
+        message: document.getElementById('test-smsBody').value,
+      });
+    }
+
+    async function uploadDocument() {
+      const file = document.getElementById('doc-file').files[0];
+      if (!file) {
+        showResponse(400, { error: 'Please select a file' });
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('documentType', document.getElementById('doc-type').value);
+      formData.append('expiryDate', document.getElementById('doc-expiry').value);
+
+      const url = getApiUrl() + '/documents/upload';
+      const token = getAuthToken();
+
+      try {
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+          body: formData,
+        });
+        const data = await response.json();
+        showResponse(response.status, data);
+      } catch (error) {
+        showResponse(0, { error: error.message });
+      }
+    }
+  </script>
+</body>
+</html>
