@@ -371,11 +371,31 @@ pnpm format       # Format all files
 | Email notifications (SendGrid) | Medium | ✅ Complete (Mock Mode) |
 | SMS notifications (Twilio) | Medium | ✅ Complete (Mock Mode) |
 
+### Frontend Pages (Phase 1) ✅ Complete
+
+| Page | Route | Description |
+|------|-------|-------------|
+| Dashboard | `/dashboard` | Participant dashboard with stats, bookings, providers |
+| Providers | `/providers` | Provider search with filters and Fair Price Score |
+| Provider Profile | `/providers/[id]` | Provider details, services, reviews, availability |
+| Bookings | `/bookings` | Booking management with status tracking |
+| Invoices | `/invoices` | Invoice list with payment status and details |
+| Settings | `/settings` | Profile, notifications, security, payment, NDIS settings |
+
+### Shared Components Created
+- `DashboardLayout` - Shared layout with responsive sidebar navigation
+- `BookNowModal` - 3-step booking flow with cost calculation
+- `FairPriceScore` - Reusable Fair Price Score badge
+- `StatusBadge` - Status badges for bookings/invoices
+
 ### Priority 1 - Launch
 
 | Feature | Effort | Status |
 |---------|--------|--------|
 | Participant budget tracking | Medium | Pending |
+| Family/Carer Account System | High | 🔄 In Progress |
+| OT Dashboard & Estimation Tool | High | Pending |
+| Partners Directory | Medium | Pending |
 | Support coordinator portal | High | Pending |
 | Reviews & ratings | Medium | Pending |
 | In-app messaging | High | Pending |
