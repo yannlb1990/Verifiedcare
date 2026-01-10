@@ -1,6 +1,6 @@
 # Verified Care - Development Progress
 
-**Last Updated:** 10 January 2026 (Payments & Notifications Complete)
+**Last Updated:** 10 January 2026 (Frontend Phase 1-4 Complete)
 **Project Location:** `/Users/yannleborgne/Desktop/Verified-Care-Project`
 
 ---
@@ -371,10 +371,14 @@ pnpm format       # Format all files
 | Email notifications (SendGrid) | Medium | ✅ Complete (Mock Mode) |
 | SMS notifications (Twilio) | Medium | ✅ Complete (Mock Mode) |
 
-### Frontend Pages (Phase 1) ✅ Complete
+### Frontend Pages (Phases 1-4) ✅ Complete
 
+**Total: 18 Pages**
+
+#### Core Pages (Phase 1)
 | Page | Route | Description |
 |------|-------|-------------|
+| Landing | `/` | Marketing homepage with services, stats, CTA |
 | Dashboard | `/dashboard` | Participant dashboard with stats, bookings, providers |
 | Providers | `/providers` | Provider search with filters and Fair Price Score |
 | Provider Profile | `/providers/[id]` | Provider details, services, reviews, availability |
@@ -382,8 +386,34 @@ pnpm format       # Format all files
 | Invoices | `/invoices` | Invoice list with payment status and details |
 | Settings | `/settings` | Profile, notifications, security, payment, NDIS settings |
 
+#### Auth Pages (Phase 2)
+| Page | Route | Description |
+|------|-------|-------------|
+| Register | `/auth/register` | Multi-step registration with role selection |
+| Login | `/auth/login` | Login with demo account hints |
+
+#### Family/Carer Pages (Phase 2)
+| Page | Route | Description |
+|------|-------|-------------|
+| Family Dashboard | `/family/dashboard` | Overview of all managed participants |
+| Family Participants | `/family/participants` | Participant management and linking |
+
+#### OT Pages (Phase 3)
+| Page | Route | Description |
+|------|-------|-------------|
+| OT Dashboard | `/ot/dashboard` | Client overview, schedule, follow-ups |
+| Estimation Tool | `/ot/estimation` | NDIS plan funding calculator |
+| Calendar | `/ot/calendar` | Week view with appointment management |
+| Follow-ups | `/ot/follow-ups` | Task management with priorities |
+| OT Clients | `/ot/participants` | Client caseload management |
+
+#### Partners Directory (Phase 4)
+| Page | Route | Description |
+|------|-------|-------------|
+| Partners | `/partners` | Allied health provider directory |
+
 ### Shared Components Created
-- `DashboardLayout` - Shared layout with responsive sidebar navigation
+- `DashboardLayout` - Shared layout with responsive sidebar navigation for all user types
 - `BookNowModal` - 3-step booking flow with cost calculation
 - `FairPriceScore` - Reusable Fair Price Score badge
 - `StatusBadge` - Status badges for bookings/invoices
@@ -392,10 +422,10 @@ pnpm format       # Format all files
 
 | Feature | Effort | Status |
 |---------|--------|--------|
-| Participant budget tracking | Medium | Pending |
-| Family/Carer Account System | High | 🔄 In Progress |
-| OT Dashboard & Estimation Tool | High | Pending |
-| Partners Directory | Medium | Pending |
+| Participant budget tracking | Medium | ✅ Complete (UI) |
+| Family/Carer Account System | High | ✅ Complete |
+| OT Dashboard & Estimation Tool | High | ✅ Complete |
+| Partners Directory | Medium | ✅ Complete |
 | Support coordinator portal | High | Pending |
 | Reviews & ratings | Medium | Pending |
 | In-app messaging | High | Pending |
