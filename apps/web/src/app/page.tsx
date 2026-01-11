@@ -6,7 +6,8 @@ import {
   ArrowRight, Shield, DollarSign, CheckCircle, Home, Search, Calendar,
   FileText, Settings, Bell, User, MapPin, Star, Clock, Phone, Menu, X,
   ChevronRight, TrendingUp, AlertCircle, CheckCircle2, Truck, Sparkles,
-  Trees, LogOut, CreditCard, HelpCircle, Plus, Filter, ChevronDown
+  Trees, LogOut, CreditCard, HelpCircle, Plus, Filter, ChevronDown,
+  Users, Briefcase, Heart, Calculator, ClipboardList
 } from 'lucide-react';
 
 // Demo data
@@ -92,6 +93,9 @@ export default function HomePage() {
                 </a>
                 <a href="#services" className="text-gray-600 hover:text-[#2D5A4A] transition-colors">
                   Services
+                </a>
+                <a href="#portals" className="text-gray-600 hover:text-[#2D5A4A] transition-colors">
+                  Portals
                 </a>
               </nav>
 
@@ -240,17 +244,103 @@ export default function HomePage() {
           </div>
         </section>
 
+        {/* Access Portals */}
+        <section className="py-16 bg-white" id="portals">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-3xl font-bold text-center mb-4">Access Your Portal</h2>
+            <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
+              Choose your role to access the features designed for you
+            </p>
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {/* Participant Portal */}
+              <Link href="/dashboard" className="group bg-[#F5F2ED] rounded-xl p-6 border-2 border-transparent hover:border-[#2D5A4A] transition-all">
+                <div className="w-14 h-14 bg-[#2D5A4A] rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                  <User className="w-7 h-7 text-white" />
+                </div>
+                <h3 className="text-xl font-semibold mb-2">Participant</h3>
+                <p className="text-gray-600 text-sm mb-4">Find providers, manage bookings, and track your NDIS budget.</p>
+                <div className="flex items-center text-[#2D5A4A] font-medium">
+                  Go to Dashboard <ChevronRight className="w-4 h-4 ml-1" />
+                </div>
+              </Link>
+
+              {/* Family/Carer Portal */}
+              <Link href="/family/dashboard" className="group bg-[#F5F2ED] rounded-xl p-6 border-2 border-transparent hover:border-[#2D5A4A] transition-all">
+                <div className="w-14 h-14 bg-[#E07850] rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                  <Users className="w-7 h-7 text-white" />
+                </div>
+                <h3 className="text-xl font-semibold mb-2">Family / Carer</h3>
+                <p className="text-gray-600 text-sm mb-4">Manage multiple participants and oversee their care services.</p>
+                <div className="flex items-center text-[#2D5A4A] font-medium">
+                  Family Dashboard <ChevronRight className="w-4 h-4 ml-1" />
+                </div>
+              </Link>
+
+              {/* OT Portal */}
+              <Link href="/ot/dashboard" className="group bg-[#F5F2ED] rounded-xl p-6 border-2 border-transparent hover:border-[#2D5A4A] transition-all">
+                <div className="w-14 h-14 bg-purple-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                  <ClipboardList className="w-7 h-7 text-white" />
+                </div>
+                <h3 className="text-xl font-semibold mb-2">OT / Therapist</h3>
+                <p className="text-gray-600 text-sm mb-4">Client management, NDIS estimation tool, and scheduling.</p>
+                <div className="flex items-center text-[#2D5A4A] font-medium">
+                  OT Dashboard <ChevronRight className="w-4 h-4 ml-1" />
+                </div>
+              </Link>
+
+              {/* Provider Portal */}
+              <Link href="/providers" className="group bg-[#F5F2ED] rounded-xl p-6 border-2 border-transparent hover:border-[#2D5A4A] transition-all">
+                <div className="w-14 h-14 bg-teal-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                  <Briefcase className="w-7 h-7 text-white" />
+                </div>
+                <h3 className="text-xl font-semibold mb-2">Provider</h3>
+                <p className="text-gray-600 text-sm mb-4">Manage jobs, track time, and handle invoicing.</p>
+                <div className="flex items-center text-[#2D5A4A] font-medium">
+                  Provider Portal <ChevronRight className="w-4 h-4 ml-1" />
+                </div>
+              </Link>
+            </div>
+
+            {/* Quick Links */}
+            <div className="mt-12 pt-8 border-t border-gray-200">
+              <h3 className="text-lg font-semibold text-center mb-6">Quick Links</h3>
+              <div className="flex flex-wrap justify-center gap-4">
+                <Link href="/partners" className="flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-lg hover:bg-[#E8F0ED] transition-colors">
+                  <Heart className="w-4 h-4 text-[#2D5A4A]" />
+                  <span>Partners Directory</span>
+                </Link>
+                <Link href="/ot/estimation" className="flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-lg hover:bg-[#E8F0ED] transition-colors">
+                  <Calculator className="w-4 h-4 text-[#2D5A4A]" />
+                  <span>NDIS Estimation Tool</span>
+                </Link>
+                <Link href="/invoices" className="flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-lg hover:bg-[#E8F0ED] transition-colors">
+                  <FileText className="w-4 h-4 text-[#2D5A4A]" />
+                  <span>Invoices</span>
+                </Link>
+                <Link href="/bookings" className="flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-lg hover:bg-[#E8F0ED] transition-colors">
+                  <Calendar className="w-4 h-4 text-[#2D5A4A]" />
+                  <span>My Bookings</span>
+                </Link>
+                <Link href="/settings" className="flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-lg hover:bg-[#E8F0ED] transition-colors">
+                  <Settings className="w-4 h-4 text-[#2D5A4A]" />
+                  <span>Settings</span>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* CTA */}
-        <section className="py-16">
+        <section className="py-16 bg-[#F5F2ED]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 className="text-3xl font-bold mb-6">Ready to Get Started?</h2>
             <p className="text-xl text-gray-600 mb-8">Join thousands of NDIS participants finding fair-priced, quality care.</p>
-            <button
-              onClick={() => setCurrentView('dashboard')}
+            <Link
+              href="/auth/register"
               className="inline-flex items-center gap-2 px-8 py-4 bg-[#E07850] text-white rounded-lg hover:bg-[#C96040] transition-colors text-lg"
             >
               Create Free Account <ArrowRight className="w-5 h-5" />
-            </button>
+            </Link>
           </div>
         </section>
 
