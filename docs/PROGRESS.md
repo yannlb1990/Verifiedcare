@@ -1,6 +1,6 @@
 # Verified Care - Development Progress
 
-**Last Updated:** 10 January 2026 (Frontend Phase 1-4 Complete)
+**Last Updated:** 11 January 2026 (Frontend Phase 1-5 Complete + PWA)
 **Project Location:** `/Users/yannleborgne/Desktop/Verified-Care-Project`
 
 ---
@@ -412,11 +412,37 @@ pnpm format       # Format all files
 |------|-------|-------------|
 | Partners | `/partners` | Allied health provider directory |
 
+### PWA Support (Phase 5) ✅ Complete
+
+**Progressive Web App Features:**
+- Installable on mobile and desktop devices
+- Works offline with service worker caching
+- Push notification ready infrastructure
+- Background sync ready for offline bookings
+- App shortcuts to key pages (Providers, Bookings, Dashboard)
+
+**PWA Files Created:**
+| File | Purpose |
+|------|---------|
+| `public/manifest.json` | App metadata, icons, shortcuts |
+| `public/sw.js` | Service worker for offline & caching |
+| `public/icons/*.png` | App icons (72-512px + apple-touch) |
+| `src/hooks/usePWA.ts` | PWA hook for install & offline status |
+| `src/components/pwa/PWAInstallPrompt.tsx` | Install prompt UI |
+| `src/components/pwa/OfflineIndicator.tsx` | Network status banner |
+
+**Installation:**
+- Chrome/Edge: "Install app" prompt appears automatically
+- Safari iOS: "Add to Home Screen" from share menu
+- Android: "Add to Home Screen" banner
+
 ### Shared Components Created
 - `DashboardLayout` - Shared layout with responsive sidebar navigation for all user types
 - `BookNowModal` - 3-step booking flow with cost calculation
 - `FairPriceScore` - Reusable Fair Price Score badge
 - `StatusBadge` - Status badges for bookings/invoices
+- `PWAInstallPrompt` - Mobile app install prompt with dismiss/remind later
+- `OfflineIndicator` - Network status banner (offline/online transitions)
 
 ### Priority 1 - Launch
 
@@ -426,6 +452,7 @@ pnpm format       # Format all files
 | Family/Carer Account System | High | ✅ Complete |
 | OT Dashboard & Estimation Tool | High | ✅ Complete |
 | Partners Directory | Medium | ✅ Complete |
+| Mobile PWA App | High | ✅ Complete |
 | Support coordinator portal | High | Pending |
 | Reviews & ratings | Medium | Pending |
 | In-app messaging | High | Pending |
